@@ -3,7 +3,7 @@
     ####################################################################################################
 
 - name: "Play2"
-  hosts: nginx-netology
+  hosts: servers
   become: true
   tasks:   
       
@@ -12,10 +12,10 @@
         name: nginx
         state: latest
   
-    - name: "Start service - nginx"
-      service:
-        name: nginx
-        state: restarted
+    # - name: "Start service - nginx"
+    #   service:
+    #     name: nginx
+    #     state: restarted
 
     - name: "Enabled - nginx"
       service:
