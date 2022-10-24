@@ -37,7 +37,7 @@
           #cloud-config
           ssh_pwauth: no
           users:
-            - name: admin
+            - name: {={ user }=}
               sudo: ALL=(ALL) NOPASSWD:ALL
               shell: /bin/bash
               ssh_authorized_keys:
@@ -107,80 +107,4 @@
       when: commands == "1"
     ####################################################################################################
 
-    ####################################################################################################
-    # Install nginx
-    ####################################################################################################
-
-- name: "Play2"
-  hosts: nginx-netology
-  become: true
-  tasks:   
-      
-    - name: "Install - nginx"
-      apt:
-        name: nginx
-        state: latest
-  
-    - name: "Start service - nginx"
-      service:
-        name: nginx
-        state: restarted
-
-    - name: "Enabled - nginx"
-      service:
-        name: nginx
-        enabled: yes
-
-    ####################################################################################################
-    # Local check URL - 200
-    ####################################################################################################
-
-    - name: "Local Check URL 200"
-      uri: url=http://{{ ansible_host }}/ status_code=200
-      delegate_to: localhost
-      register: url_check
-    
-    - debug:
-        msg:
-        - "{{ url_check }}" 
-        - "{{ url_check.status }}"
-   ####################################################################################################
-
-   
-   ####################################################################################################
-
-
-    ####################################################################################################
-    # Install postgresql
-    ####################################################################################################
-
-- name: "Play3"
-  hosts: postgrest-netology
-  become: true
-  tasks: 
- 
-    - name: "Install - postgresql"
-      apt:
-        name: postgresql
-        state: latest
-        update_cache: yes
-  
-    - name: "Start service - postgresql"
-      service:
-        name: postgresql
-        state: restarted
-
-    - name: "Enabled - postgresql"
-      service:
-        name: postgresql
-        enabled: yes
-
-    - name: "Check postgresql"
-      shell: "systemctl status postgresql"
-      register: cmd
-    
-    - debug:
-        msg: "{{ cmd.stdout_lines }}"     
-
-    ####################################################################################################
 ...      
