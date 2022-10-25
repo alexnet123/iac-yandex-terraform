@@ -9,17 +9,17 @@ terraform {
 
 provider "yandex" {
  
-  token     = "{={ token }=}"
-  cloud_id  = "{={ cloud_id }=}"
-  folder_id = "{={ folder_id }=}"
-  zone      = "{={ zone }=}"
+  token     = "y0_AgAAAABkbnEbAATuwQAAAADRe319HyCOnGH2Q2SiGV_TEQrlLBgz1RI"
+  cloud_id  = "b1gbalrr4suqf4hapk6f"
+  folder_id = "b1gq0mj5rh4up9offieh"
+  zone      = "ru-central1-a"
 
 }
 
 
 #vm1#####################################################
-resource "yandex_compute_instance" "{={ hostname }=}" {
-  name = "{={ hostname }=}"
+resource "yandex_compute_instance" "nginx-netology" {
+  name = "nginx-netology"
   platform_id = "standard-v3" #Intel Ice Lake
 
   resources {
@@ -29,14 +29,14 @@ resource "yandex_compute_instance" "{={ hostname }=}" {
 
   boot_disk {
     initialize_params {
-      image_id = "{={ image_id }=}"
+      image_id = "fd83clk0nfo8p172omkn"
       size = 10       
   }
 
 }
 
   network_interface {
-    subnet_id = "{={ subnet_id }=}"
+    subnet_id = "e9b8fq1qlnj7mb6r5rgf"
     nat       = true
   }
    
@@ -60,9 +60,9 @@ resource "yandex_compute_instance" "{={ hostname }=}" {
  resource "local_file" "hosts" {
   content = templatefile("hosts.tmpl",
     {
-     external_ip_address_vm1 = yandex_compute_instance.{={ hostname }=}.network_interface.0.nat_ip_address
-     user_vm1 = "{={ user }=}"
-     hostname_vm1 = "{={ hostname }=}"
+     external_ip_address_vm1 = yandex_compute_instance.nginx-netology.network_interface.0.nat_ip_address
+     user_vm1 = "admin"
+     hostname_vm1 = "nginx-netology"
     }
   )
   filename = "hosts"

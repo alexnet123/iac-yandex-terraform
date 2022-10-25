@@ -3,8 +3,8 @@
   hosts: localhost
   vars:
     ansible_connection: local
-    ansible_python_interpreter: {={ ansible_python_interpreter }=}
-    ssh_key_path: {={ ssh_key_path }=}
+    ansible_python_interpreter: /usr/bin/python3
+    ssh_key_path: /root/.ssh/id_rsa.pub
   vars_prompt:
 
     - name: commands 
@@ -37,7 +37,7 @@
           #cloud-config
           ssh_pwauth: no
           users:
-            - name: {={ user }=}
+            - name: admin
               sudo: ALL=(ALL) NOPASSWD:ALL
               shell: /bin/bash
               ssh_authorized_keys:
