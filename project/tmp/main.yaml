@@ -3,8 +3,8 @@
   hosts: localhost
   vars:
     ansible_connection: local
-    ansible_python_interpreter: /usr/bin/python3
-    ssh_key_path: /root/.ssh/id_rsa.pub
+    ansible_python_interpreter: "/usr/bin/python3"
+    ssh_key_path: "/root/.ssh/id_rsa.pub"
   vars_prompt:
 
     - name: commands 
@@ -111,8 +111,14 @@
     ####################################################################################################
     # Include a play after another play
     ####################################################################################################
+- name: "Play2"
+  hosts: servers
+  become: true
+  tasks:   
     - name: "Include a play after another play"
-      import_playbook: nginx.yaml
+      import_tasks: nginx.yaml
+    # - name: "Include a play after another play"
+    #   include: nginx.yaml
     ####################################################################################################
 
 ...      

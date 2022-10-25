@@ -28,7 +28,7 @@ def parser():
     with open(path+'vars.yaml') as f:
         vars = yaml.load(f, Loader=SafeLoader)
         #print(vars["vars"].items())
-        print(list(vars["vars"].items())[0])
+        #print(list(vars["vars"].items())[0])
 
     i = 0
     while i < len(vars["file"]):
@@ -59,6 +59,26 @@ def parser():
         print(txt)
         print("====================================================================================================================================")
         i = i + 1
+
+
+# def import_playbook():
+#     with open(path+'vars.yaml') as f:
+#         vars = yaml.load(f, Loader=SafeLoader)
+#         #print(vars["vars"].items())
         
+#     #vars = vars["import_playbook"]
+#     i = 0
+#     while i < len(vars["import_playbook"]):
+#         file = open(path+vars["import_playbook"][i])
+#         txt = file.read()
+#         file.close()
+
+
+#         with open(path_tmp+fl, "w") as f:
+#             f.write(txt)
+
+
+#         print(txt)
+#         i = i + 1
 
 parser()

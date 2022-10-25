@@ -11,7 +11,14 @@ vars:
   ansible_python_interpreter: "/usr/bin/python3"
   ssh_key_path: "/root/.ssh/id_rsa.pub"
 
+
+
 file:
   - templates/terraform/main.tf
   - templates/ansible/main.yaml
+
+
+#import ==> templates/ansible/main.yaml
+# import_playbook:
+#   - templates/ansible/nginx.yaml
 ...
