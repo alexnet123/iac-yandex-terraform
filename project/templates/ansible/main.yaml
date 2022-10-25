@@ -67,9 +67,9 @@
       when: commands == "2"
 
     - name: "Terraform rm file"
-      shell: rm terraform.*
-      args:
-        chdir: "{{ playbook_dir }}"
+      file:
+        path: "{{ playbook_dir }}"
+        state: absent
       delegate_to: localhost
       become: true     
       register: rm_file
