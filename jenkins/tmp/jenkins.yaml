@@ -37,6 +37,9 @@
       state: latest
       update_cache: true
 
+  - name: "usermod -a -G docker jenkins"
+    shell: usermod -a -G docker jenkins
+
   - name: "Test key"
     shell: cat /var/lib/jenkins/secrets/initialAdminPassword     
     register: key_file

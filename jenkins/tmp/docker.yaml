@@ -1,7 +1,7 @@
 # - name: "Play Docker Debian on x86_64 / amd64, armhf, arm64, and Raspbian"
 #   hosts: all
 #   tasks:
-  - name: "Install required system packages"
+  - name: "Install required system packages Docker"
     apt:
       pkg:
         - apt-transport-https
@@ -12,12 +12,12 @@
       state: latest
       update_cache: true
 
-  - name: Add signing key
+  - name: Add signing key Docker
     apt_key:
       url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
       state: present
 
-  - name: Add repository into sources list
+  - name: Add repository into sources list Docker
     apt_repository:
       repo: "deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
       state: present
@@ -31,4 +31,4 @@
         - docker-compose
         - docker-registry
       state: latest
-      update_cache: true
+      update_cache: true  
