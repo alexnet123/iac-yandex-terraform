@@ -9,8 +9,12 @@ rep = r"{={(.*)}=}"
 #
 param = "+++HHHHH+++"
 
+
 path = "project/"
+print('input folder path')
+path = input("==>:")  # считываем строку и кладём её в переменную name
 path_tmp = path+"tmp/"
+
 
 #template file
 def parser():
@@ -65,6 +69,8 @@ def parser():
 
 
 
+
+
 # def import_playbook():
 #     with open(path+'vars.yaml') as f:
 #         vars = yaml.load(f, Loader=SafeLoader)
@@ -84,5 +90,6 @@ def parser():
 
 #         print(txt)
 #         i = i + 1
+
 
 parser()
