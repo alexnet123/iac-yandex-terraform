@@ -1,0 +1,4 @@
+#config
+pr_folder:
+  - jenkins/
+  - project/

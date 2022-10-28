@@ -23,14 +23,14 @@ resource "yandex_compute_instance" "{={ hostname }=}" {
   platform_id = "standard-v3" #Intel Ice Lake
 
   resources {
-    cores  = 2
-    memory = 4
+    cores  = {={ vm_Vcpu }=}
+    memory = {={ vm_memory }=}
   }
 
   boot_disk {
     initialize_params {
       image_id = "{={ image_id }=}"
-      size = 10       
+      size = {={ vm_disk_size }=}       
   }
 
 }

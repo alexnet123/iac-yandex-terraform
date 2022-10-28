@@ -1,24 +1,22 @@
 ---
+#Variables ==> {={ xxx }=}
 vars:
-  token: "y0_AgAAAABkbnEbAATuwQAAAADRe319HyCOnGH2Q2SiGV_TEQrlLBgz1RI"
+  token: "y0_AgAAAABkbnEbAATuwQAAAADRe319HyCOnGH2Q2SiGV_TEQrlLBgz1RI"      
   cloud_id: "b1gbalrr4suqf4hapk6f"
   folder_id: "b1gq0mj5rh4up9offieh"
   zone: "ru-central1-a"
-  image_id: "fd83clk0nfo8p172omkn" #Debian 10
   subnet_id: "e9b8fq1qlnj7mb6r5rgf"
   hostname: "jenkins"
   user: "admin"
   ansible_python_interpreter: "/usr/bin/python3"
   ssh_key_path: "/root/.ssh/id_rsa.pub"
+  image_id: "fd83clk0nfo8p172omkn" #Debian 10
+  vm_memory: "4"
+  vm_Vcpu: "2"
+  vm_disk_size: "10"
 
-
-
+#Pattern validation
 file:
   - templates/terraform/main.tf
   - templates/ansible/main.yaml
-
-
-#import ==> templates/ansible/main.yaml
-# import_playbook:
-#   - templates/ansible/nginx.yaml
 ...
