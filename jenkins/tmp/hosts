@@ -1,2 +1,2 @@
 [servers]
-jenkins ansible_host=62.84.127.238 ansible_user=admin ansible_python_interpreter=/usr/bin/python3
+jenkins ansible_host=51.250.89.24 ansible_user=admin ansible_python_interpreter=/usr/bin/python3

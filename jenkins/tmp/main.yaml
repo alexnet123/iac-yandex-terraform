@@ -1,5 +1,5 @@
 ---
-- name: "Play1"
+- name: "MAIN"
   hosts: localhost
   vars:
     ansible_connection: local
@@ -159,7 +159,30 @@
       import_tasks: go.yaml
 ####################################################################################################
 
+####################################################################################################
+# Include - Nexus-docker_compose
+####################################################################################################
+- name: "Nexus3-docker_compose"
+  hosts: servers
+  become: true
+  vars:
+    docker_compose_yaml_src: "{{ playbook_dir }}/nexus3.yaml"
+    docker_compose_yaml_dest: "/home/admin/nexus3/nexus3.yaml"
+    docker_compose_folder_dest: "/home/admin/nexus3" 
+  tasks:
+    - name: "Create directory - {{ docker_compose_folder_dest }}"
+      file:
+        path: "{{ docker_compose_folder_dest }}"
+        state: directory
+    - copy:
+        src: "{{ docker_compose_yaml_src }}"
+        dest: "{{ docker_compose_yaml_dest }}"  
+    - name: "Create and start services Nexus3"
+      shell: "docker-compose -f {{ docker_compose_yaml_dest }} up -d" 
+      register: nexus3
 
-docker run -d -p 192.168.56.10:8081:8081 -p 192.168.56.10:8082:8082 --name nexus -e INSTALL4J_ADD_VM_PARAMS="-Xms512m -Xmx512m -XX:MaxDirectMemorySize=273m" sonatype/nexus3
+    - debug:
+        var: nexus3
+####################################################################################################
 
 ...      

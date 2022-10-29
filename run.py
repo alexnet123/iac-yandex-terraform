@@ -68,6 +68,14 @@ class IAC_MNG:
     def cope_tmp(self):
         if os.path.exists(self.path_tmp):
             print("==>",self.path_tmp)
+            os.system("cp -r "+self.path+"templates/ansible/* "+self.path_tmp)
+            print("cp -r "+self.path+"templates/ansible/* "+self.path_tmp)
+
+            os.system("cp -r "+self.path+"templates/terraform/* "+self.path_tmp)
+            print("cp -r "+self.path+"templates/terraform/* "+self.path_tmp)
+
+            os.system("cp -r "+self.path+"templates/docker_compose/* "+self.path_tmp)
+            print("cp -r "+self.path+"templates/docker_compose/* "+self.path_tmp)
         else:
             print('Объект не найден')
             os.system("rm -rf "+self.path_tmp)
@@ -81,6 +89,9 @@ class IAC_MNG:
 
             os.system("cp -r "+self.path+"templates/terraform/* "+self.path_tmp)
             print("cp -r "+self.path+"templates/terraform/* "+self.path_tmp)
+
+            os.system("cp -r "+self.path+"templates/docker_compose/* "+self.path_tmp)
+            print("cp -r "+self.path+"templates/docker_compose/* "+self.path_tmp)
 
     #Add config
     def conf(self):
