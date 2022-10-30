@@ -20,7 +20,7 @@ class IAC_MNG:
         #add config
         cf = self.conf()
         print(cf)
-        self.path = cf["pr_folder"][0]
+        self.path = cf #cf["pr_folder"][0]
         self.path_tmp = self.path+"tmp/"
 
         #Проверка папки tmp
@@ -63,6 +63,8 @@ class IAC_MNG:
             print("\033[37;1;41m ==================================================================================================================================== \033[0m")
 
             i = i + 1
+        
+        #os.system(self.path_tmp)
 
     #Проверка существоания папки tmp
     def cope_tmp(self):
@@ -98,7 +100,13 @@ class IAC_MNG:
         if os.path.exists("conf.yaml"):
             with open('conf.yaml') as f:
                 conf = yaml.load(f, Loader=SafeLoader)
-            return conf
+            print("\033[37;1;41m ==================================================================================================================================== \033[0m")
+            i = 0 
+            while i < len(conf['pr_folder']):
+                print(i+1," | ",conf['pr_folder'][i])
+                i = i + 1
+            inp = input("==>:")
+            return conf['pr_folder'][int(inp)-1]
         else:
             os.system("echo '#config' > conf.yaml")
 
