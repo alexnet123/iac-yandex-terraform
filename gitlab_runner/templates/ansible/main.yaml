@@ -111,13 +111,13 @@
 ####################################################################################################
 # HOSTNAME
 ####################################################################################################
-- name: "Hostname ==> {={ hostname }=}"
-  hosts: servers
-  become: true
-  tasks:   
-    - name: "Set a hostname - {={ hostname }=}"
-      hostname:
-        name: "{={ hostname }=}"
+# - name: "Hostname ==> {={ hostname }=}"
+#   hosts: servers
+#   become: true
+#   tasks:   
+#     - name: "Set a hostname - {={ hostname }=}"
+#       hostname:
+#         name: "{={ hostname }=}"
 ####################################################################################################
 
 ####################################################################################################
@@ -149,7 +149,7 @@
   hosts: servers
   become: true
   vars:
-    docker_compose_file: nexus3   
+    docker_compose_file: sonarqube   
     docker_compose_yaml_src: "{{ playbook_dir }}/{{ docker_compose_file }}.yaml"
     docker_compose_yaml_dest: "/home/{={ user }=}/{{ docker_compose_file }}/{{ docker_compose_file }}.yaml"
     docker_compose_folder_dest: "/home/{={ user }=}/{{ docker_compose_file }}" 
@@ -163,9 +163,9 @@
         dest: "{{ docker_compose_yaml_dest }}"  
     - name: "Create and start services {{ docker_compose_file }}"
       shell: "docker-compose -f {{ docker_compose_yaml_dest }} up -d" 
-      register: {{ docker_compose_file }}
+      register: "{{ docker_compose_file }}"
 
     - debug:
-        var: {{ docker_compose_file }}
+        var: "{{ docker_compose_file }}"
 ####################################################################################################      
 ...      

@@ -1,0 +1,171 @@
+---
+- name: "MAIN"
+  hosts: localhost
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "/usr/bin/python3"
+    ssh_key_path: "/root/.ssh/id_rsa.pub"
+  vars_prompt:
+
+    - name: commands 
+      prompt: |
+        
+        ===============================================================
+        Terraform main commands:
+        (1) apply   - ( Create or update infrastructure )
+        (2) destroy - ( Destroy previously-created infrastructure )
+        (3) exit
+        ===============================================================
+      private: false
+
+  tasks:
+    
+    ####################################################################################################
+    #Exit
+    ####################################################################################################
+    - name: "Exit playbook"
+      meta: end_play
+      when: commands == "3" 
+    ####################################################################################################
+    
+    - name: "CAT id_rsa.pub => vars"
+      shell: "cat {{ ssh_key_path }}"
+      register: ssh_key    
+    - name: "Copy meta content"
+      copy:
+        content: |
+          #cloud-config
+          ssh_pwauth: no
+          users:
+            - name: admin
+              sudo: ALL=(ALL) NOPASSWD:ALL
+              shell: /bin/bash
+              ssh_authorized_keys:
+                - {{ ssh_key.stdout }}
+        dest: "{{ playbook_dir }}/meta.yaml"
+
+    - debug: 
+        msg: 
+        - "{{ playbook_dir }}"
+        - "{{ ansible_python_interpreter }}"
+    
+    ####################################################################################################
+    #Terraform commands
+    ####################################################################################################
+
+    - name: "Terraform destroy"
+      command: terraform destroy -no-color -input=false -auto-approve=true
+      args:
+        chdir: "{{ playbook_dir }}"
+      delegate_to: localhost
+      become: true     
+      register: destroy
+      when: commands == "2"
+
+    - debug: 
+        msg: "{{ destroy }}"
+      when: commands == "2"
+
+    - name: "Terraform rm file"
+      file:
+        path: "{{ playbook_dir }}"
+        state: absent
+      delegate_to: localhost
+      become: true     
+      register: rm_file
+      when: commands == "2"
+
+    - name: "Terraform init"
+      command: terraform init
+      args:
+        chdir: "{{ playbook_dir }}"
+      delegate_to: localhost
+      become: true     
+      when: commands == "1"
+
+    - name: "Terraform aplly"
+      command: terraform apply -no-color -input=false -auto-approve=true
+      args:
+        chdir: "{{ playbook_dir }}"
+      delegate_to: localhost
+      become: true     
+      register: aplly
+      when: commands == "1"
+
+    - debug: 
+        msg: "{{ aplly }}"
+      when: commands == "1"
+    ####################################################################################################
+
+    ####################################################################################################
+    # Refresh_inventory
+    ####################################################################################################
+    - name: "Refresh inventory and pause 30 sec"
+      meta: refresh_inventory
+    - pause:
+        seconds: 30
+      when: commands == "1"
+    ####################################################################################################
+
+
+####################################################################################################
+# HOSTNAME
+####################################################################################################
+# - name: "Hostname ==> gitlab-runner"
+#   hosts: servers
+#   become: true
+#   tasks:   
+#     - name: "Set a hostname - gitlab-runner"
+#       hostname:
+#         name: "gitlab-runner"
+####################################################################################################
+
+####################################################################################################
+# Include - Docker
+####################################################################################################
+- name: "Docker"
+  hosts: servers
+  become: true
+  tasks:   
+    - name: "Include Docker"
+      import_tasks: docker.yaml
+####################################################################################################
+
+####################################################################################################
+# Include - linux_conf
+####################################################################################################
+- name: "linux_conf"
+  hosts: servers
+  become: true
+  tasks:   
+    - name: "Include linux_conf"
+      import_tasks: linux_conf.yaml
+####################################################################################################
+
+####################################################################################################
+# Include - Nexus-docker_compose
+####################################################################################################
+- name: "Docker_compose"
+  hosts: servers
+  become: true
+  vars:
+    docker_compose_file: sonarqube   
+    docker_compose_yaml_src: "{{ playbook_dir }}/{{ docker_compose_file }}.yaml"
+    docker_compose_yaml_dest: "/home/admin/{{ docker_compose_file }}/{{ docker_compose_file }}.yaml"
+    docker_compose_folder_dest: "/home/admin/{{ docker_compose_file }}" 
+  tasks:
+    - name: "Create directory - {{ docker_compose_folder_dest }}"
+      file:
+        path: "{{ docker_compose_folder_dest }}"
+        state: directory
+    - copy:
+        src: "{{ docker_compose_yaml_src }}"
+        dest: "{{ docker_compose_yaml_dest }}"  
+    - name: "Create and start services {{ docker_compose_file }}"
+      shell: "docker-compose -f {{ docker_compose_yaml_dest }} up -d" 
+      register: "{{ docker_compose_file }}"
+
+    - debug:
+        var: "{{ docker_compose_file }}"
+####################################################################################################      
+...      

@@ -63,8 +63,8 @@ class IAC_MNG:
             print("\033[37;1;41m ==================================================================================================================================== \033[0m")
 
             i = i + 1
-        
-        #os.system(self.path_tmp)
+        #Run ansible-playbook main.yaml
+        os.system("cd "+self.path_tmp+" && ansible-playbook main.yaml")
 
     #Проверка существоания папки tmp
     def cope_tmp(self):

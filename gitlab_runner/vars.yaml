@@ -6,14 +6,14 @@ vars:
   folder_id: "b1gq0mj5rh4up9offieh"
   zone: "ru-central1-a"
   subnet_id: "e9b8fq1qlnj7mb6r5rgf"
-  hostname: "gitlab"
+  hostname: "gitlab-runner"
   user: "admin"
   ansible_python_interpreter: "/usr/bin/python3"
   ssh_key_path: "/root/.ssh/id_rsa.pub"
-  image_id: "fd83clk0nfo8p172omkn" #Debian 10
+  image_id: "fd8kdq6d0p8sij7h5qe3" #Ubuntu  20.04
   vm_memory: "4"
   vm_Vcpu: "2"
-  vm_disk_size: "15"
+  vm_disk_size: "30"
 
 #Pattern validation
 file:
