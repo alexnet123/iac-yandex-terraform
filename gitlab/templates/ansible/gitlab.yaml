@@ -27,13 +27,24 @@
 
   - name: "Add the GitLab package repository and install the package - 2"
     shell: "apt install gitlab-ce"
+    register: git_log
 
+  # - name: "Change GitLab configurations"
+  - lineinfile:
+      dest: /etc/gitlab/gitlab.rb
+      regexp: '^external_url'
+      line: "external_url 'http://{{ ansible_host }}'"
 
+  - name: "==>: gitlab-ctl reconfigure"
+    shell: gitlab-ctl reconfigure
 
-  # - name: "Test key"
-  #   shell: cat /etc/gitlab/initial_root_password  
-  #   register: key_file
-  # - debug:
-  #     msg: "{{ key_file.stdout }}"
+  - debug:
+      msg: "{{ git_log }}"
 
+  - debug:
+      msg:
+      - "Gitlab URL http://{{ ansible_host }}"
+      - "Reset root password ==>:  gitlab-rake 'gitlab:password:reset[root]'" 
+      - "Install and Configure GitLab CE on Debian 11/10 - https://computingforgeeks.com/install-and-configure-gitlab-ce-on-debian/"
+      - "ssh {={ user }=}@{{ ansible_host }}" 
 

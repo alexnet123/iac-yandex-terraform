@@ -19,4 +19,11 @@ vars:
 file:
   - templates/terraform/main.tf
   - templates/ansible/main.yaml
+
+#Terraform add OS
+level1: 
+  - templates/terraform/main.tf
+level2:
+  - templates/ansible/main.yaml
+
 ...

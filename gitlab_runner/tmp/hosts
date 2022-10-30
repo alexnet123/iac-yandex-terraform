@@ -1,2 +1,0 @@
-[servers]
-gitlab-runner ansible_host=178.154.240.176 ansible_user=admin ansible_python_interpreter=/usr/bin/python3

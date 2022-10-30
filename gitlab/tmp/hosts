@@ -1,2 +1,0 @@
-[servers]
-gitlab ansible_host=62.84.114.122 ansible_user=admin ansible_python_interpreter=/usr/bin/python3
