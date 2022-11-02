@@ -1,5 +1,12 @@
 ---
+#Debug
+#------------------------------------------------------------------------------------------------------------------#
+debug:
+  mode: true
+#------------------------------------------------------------------------------------------------------------------#
+
 #Variables ==> {={ xxx }=}
+#------------------------------------------------------------------------------------------------------------------#
 vars:
   token: "y0_AgAAAABkbnEbAATuwQAAAADRe319HyCOnGH2Q2SiGV_TEQrlLBgz1RI"      
   cloud_id: "b1gbalrr4suqf4hapk6f"
@@ -14,16 +21,96 @@ vars:
   vm_memory: "6"
   vm_Vcpu: "2"
   vm_disk_size: "15"
+  path_tmp: tmp/ #Папка tmp
+#------------------------------------------------------------------------------------------------------------------#
 
-#Pattern validation
+
+#Rendering file
+#------------------------------------------------------------------------------------------------------------------#
 file:
   - templates/terraform/main.tf
   - templates/ansible/main.yaml
+#------------------------------------------------------------------------------------------------------------------#
 
-#Terraform add OS
-level1: 
-  - templates/terraform/main.tf
-level2:
-  - templates/ansible/main.yaml
+#=====================
+#Assembly levels
+#=====================
 
+#File preparation
+#------------------------------------------------------------------------------------------------------------------#
+level1:
+  print: File preparation
+
+level1.1:
+  print: Cope file
+  prog: py
+  code: |
+    import os
+    if os.path.exists({={ path_tmp }=}):
+        print("==>",{={ path_tmp }=})
+        os.system("cp -r "+self.path+"templates/ansible/* "+{={ path_tmp }=})
+        print("cp -r "+self.path+"templates/ansible/* "+{={ path_tmp }=})
+        os.system("cp -r "+self.path+"templates/terraform/* "+{={ path_tmp }=})
+        print("cp -r "+self.path+"templates/terraform/* "+{={ path_tmp }=})
+        os.system("cp -r "+self.path+"templates/docker_compose/* "+{={ path_tmp }=})
+        print("cp -r "+self.path+"templates/docker_compose/* "+{={ path_tmp }=})
+    else:
+        print('Объект не найден')
+        os.system("rm -rf "+{={ path_tmp }=})
+        print("rm -rf "+{={ path_tmp }=})
+        os.system("mkdir "+{={ path_tmp }=})
+        print("mkdir "+{={ path_tmp }=})
+        os.system("cp -r "+self.path+"templates/ansible/* "+{={ path_tmp }=})
+        print("cp -r "+self.path+"templates/ansible/* "+{={ path_tmp }=})
+        os.system("cp -r "+self.path+"templates/terraform/* "+{={ path_tmp }=})
+        print("cp -r "+self.path+"templates/terraform/* "+{={ path_tmp }=})
+        os.system("cp -r "+self.path+"templates/docker_compose/* "+{={ path_tmp }=})
+        print("cp -r "+self.path+"templates/docker_compose/* "+{={ path_tmp }=})
+
+level1.2:
+  print: Add file meta.yaml
+  prog: bash
+  code: |
+    cat << EOF >> meta.yaml
+    #cloud-config
+    ssh_pwauth: no
+    users:
+      - name: {={ user }=}
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        shell: /bin/bash
+        ssh_authorized_keys:
+          - {={ ssh_key.stdout }=}
+    EOF
+#------------------------------------------------------------------------------------------------------------------#
+
+
+#Terraform OS creation
+#------------------------------------------------------------------------------------------------------------------#
+level2: 
+  print: Terraform OS creation
+
+level2.1: 
+  print: Terraform OS install
+  prog: bash
+  code: | 
+    cd templates/terraform/main.tf && terraform init
+    cd templates/ansible/main.yaml && terraform apply -no-color -input=false -auto-approve=true
+
+level2.2: 
+  print: Terraform OS destroy
+  prog: bash
+  code: | 
+    terraform destroy -no-color -input=false -auto-approve=true
+    rm папка темп
+#------------------------------------------------------------------------------------------------------------------#
+  
+
+#Anseble install gitlab
+#------------------------------------------------------------------------------------------------------------------#
+level3:
+  print: Install gitlab 
+  prog: bash
+  code: |
+    cd templates/ansible/gitlab.yaml && ansible-playbook
+#------------------------------------------------------------------------------------------------------------------# 
 ...

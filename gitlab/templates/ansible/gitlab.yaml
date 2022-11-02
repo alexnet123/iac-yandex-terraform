@@ -1,50 +1,51 @@
-    ####################################################################################################
-    # Install gitlab
-    ####################################################################################################
+  ####################################################################################################
+  # Install gitlab
+  ####################################################################################################
 # https://computingforgeeks.com/install-and-configure-gitlab-ce-on-debian/
-# - name: "Play gitlab Debian on x86_64 "
-#   hosts: all
-#   tasks:
-  - name: "Update repositories cache"
-    shell: apt update && sudo apt -y full-upgrade
+- name: "Play gitlab"
+  hosts: servers
+  become: true
+  tasks:
+    - name: "Update repositories cache"
+      shell: apt update && sudo apt -y full-upgrade
+    
+    - name: "Install and configure the necessary dependencies"
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg 
+          - lsb-release
+          - perl
+          - tzdata
+          #- git
+        state: latest
+        update_cache: true
   
-  - name: "Install and configure the necessary dependencies"
-    apt:
-      pkg:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - gnupg 
-        - lsb-release
-        - perl
-        - tzdata
-        #- git
-      state: latest
-      update_cache: true
-
-  - name: "Add the GitLab package repository and install the package - 1"
-    shell: "curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash"
-
-  - name: "Add the GitLab package repository and install the package - 2"
-    shell: "apt install gitlab-ce"
-    register: git_log
-
-  # - name: "Change GitLab configurations"
-  - lineinfile:
-      dest: /etc/gitlab/gitlab.rb
-      regexp: '^external_url'
-      line: "external_url 'http://{{ ansible_host }}'"
-
-  - name: "==>: gitlab-ctl reconfigure"
-    shell: gitlab-ctl reconfigure
-
-  - debug:
-      msg: "{{ git_log }}"
-
-  - debug:
-      msg:
-      - "Gitlab URL http://{{ ansible_host }}"
-      - "Reset root password ==>:  gitlab-rake 'gitlab:password:reset[root]'" 
-      - "Install and Configure GitLab CE on Debian 11/10 - https://computingforgeeks.com/install-and-configure-gitlab-ce-on-debian/"
-      - "ssh {={ user }=}@{{ ansible_host }}" 
+    - name: "Add the GitLab package repository and install the package - 1"
+      shell: "curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash"
+  
+    - name: "Add the GitLab package repository and install the package - 2"
+      shell: "apt install gitlab-ce"
+      register: git_log
+  
+    # - name: "Change GitLab configurations"
+    - lineinfile:
+        dest: /etc/gitlab/gitlab.rb
+        regexp: '^external_url'
+        line: "external_url 'http://{{ ansible_host }}'"
+  
+    - name: "==>: gitlab-ctl reconfigure"
+      shell: gitlab-ctl reconfigure
+  
+    - debug:
+        msg: "{{ git_log }}"
+  
+    - debug:
+        msg:
+        - "Gitlab URL http://{{ ansible_host }}"
+        - "Reset root password ==>:  gitlab-rake 'gitlab:password:reset[root]'" 
+        - "Install and Configure GitLab CE on Debian 11/10 - https://computingforgeeks.com/install-and-configure-gitlab-ce-on-debian/"
+        - "ssh {={ user }=}@{{ ansible_host }}" 
 
