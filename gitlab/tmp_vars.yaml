@@ -29,8 +29,8 @@ vars:
 #------------------------------------------------------------------------------------------------------------------#
 render:
   file:
-    - "{={ path_tmp }=}/main.tf"
-    - "{={ path_tmp }=}/main.yaml"
+    - "tmp/terraform/main.tf"
+    - "tmp/ansible/main.yaml"
 #------------------------------------------------------------------------------------------------------------------#
 
 #=====================
@@ -39,6 +39,8 @@ render:
 
 level5.4:
   print: test1
+
+
 
 #File preparation
 #------------------------------------------------------------------------------------------------------------------#
@@ -50,26 +52,26 @@ level1.1:
   prog: py
   code: |
     import os
-    if os.path.exists({={ path_tmp }=}):
-        print("==>",{={ path_tmp }=})
-        os.system("cp -r "+self.path+"templates/ansible/* "+{={ path_tmp }=})
-        print("cp -r "+self.path+"templates/ansible/* "+{={ path_tmp }=})
-        os.system("cp -r "+self.path+"templates/terraform/* "+{={ path_tmp }=})
-        print("cp -r "+self.path+"templates/terraform/* "+{={ path_tmp }=})
-        os.system("cp -r "+self.path+"templates/docker_compose/* "+{={ path_tmp }=})
-        print("cp -r "+self.path+"templates/docker_compose/* "+{={ path_tmp }=})
+    if os.path.exists(tmp/):
+        print("==>",tmp/)
+        os.system("cp -r "+self.path+"templates/ansible/* "+tmp/)
+        print("cp -r "+self.path+"templates/ansible/* "+tmp/)
+        os.system("cp -r "+self.path+"templates/terraform/* "+tmp/)
+        print("cp -r "+self.path+"templates/terraform/* "+tmp/)
+        os.system("cp -r "+self.path+"templates/docker_compose/* "+tmp/)
+        print("cp -r "+self.path+"templates/docker_compose/* "+tmp/)
     else:
         print('Объект не найден')
-        os.system("rm -rf "+{={ path_tmp }=})
-        print("rm -rf "+{={ path_tmp }=})
-        os.system("mkdir "+{={ path_tmp }=})
-        print("mkdir "+{={ path_tmp }=})
-        os.system("cp -r "+self.path+"templates/ansible/* "+{={ path_tmp }=})
-        print("cp -r "+self.path+"templates/ansible/* "+{={ path_tmp }=})
-        os.system("cp -r "+self.path+"templates/terraform/* "+{={ path_tmp }=})
-        print("cp -r "+self.path+"templates/terraform/* "+{={ path_tmp }=})
-        os.system("cp -r "+self.path+"templates/docker_compose/* "+{={ path_tmp }=})
-        print("cp -r "+self.path+"templates/docker_compose/* "+{={ path_tmp }=})
+        os.system("rm -rf "+tmp/)
+        print("rm -rf "+tmp/)
+        os.system("mkdir "+tmp/)
+        print("mkdir "+tmp/)
+        os.system("cp -r "+self.path+"templates/ansible/* "+tmp/)
+        print("cp -r "+self.path+"templates/ansible/* "+tmp/)
+        os.system("cp -r "+self.path+"templates/terraform/* "+tmp/)
+        print("cp -r "+self.path+"templates/terraform/* "+tmp/)
+        os.system("cp -r "+self.path+"templates/docker_compose/* "+tmp/)
+        print("cp -r "+self.path+"templates/docker_compose/* "+tmp/)
 
 level1.2:
   print: Add file meta.yaml
@@ -79,18 +81,17 @@ level1.2:
     #cloud-config
     ssh_pwauth: no
     users:
-      - name: {={ user }=}
+      - name: admin
         sudo: ALL=(ALL) NOPASSWD:ALL
         shell: /bin/bash
         ssh_authorized_keys:
-          - {={ ssh_key_path }=}
+          - /root/.ssh/id_rsa.pub
     EOF
 #------------------------------------------------------------------------------------------------------------------#
 
 
 level4:
   print: test1
-
 
 #Terraform OS creation
 #------------------------------------------------------------------------------------------------------------------#
