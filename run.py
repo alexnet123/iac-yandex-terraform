@@ -14,7 +14,8 @@ class IAC_MNG:
     param = "+++HHHHH+++"
     path = ""
     path_tmp = ""
-
+    
+    #file
     ci_cd_file = "vars.yaml"
     conf_file = "conf.yaml"
     ci_cd_file_tmp = "tmp_"+ci_cd_file
@@ -194,11 +195,13 @@ class IAC_MNG:
             self.yaml_debug(e.args)
 
     #ci/cd syntax check
-    def yaml_syntax_check(self):
-        
+    def yaml_syntax_check(self,in_file):
+        print(self.yaml_sort())
         with open(in_file) as f:
             vars = yaml.load(f, Loader=SafeLoader)
-        print(vars["render"]["file"])
+        
+        print(vars[self.yaml_sort()[0]]["mode1"])
+
         #print(list(vars["vars"].items())[0]) 
 
 
@@ -210,4 +213,4 @@ a.test()
 #a.rendering(a.path+a.ci_cd_file,a.path+"tmp_"+a.ci_cd_file)
 #a.rendering_file(a.path+a.ci_cd_file_tmp)
 #print(a.yaml_sort())
-a.yaml_syntax_check()
+a.yaml_syntax_check(a.path+a.ci_cd_file_tmp)
