@@ -19,6 +19,9 @@ class IAC_MNG:
     conf_file = "conf.yaml"
     ci_cd_file_tmp = "tmp_"+ci_cd_file
 
+    error = 0
+
+
     #template file
     def rendering_file(self,in_file):
         try:
@@ -54,32 +57,37 @@ class IAC_MNG:
 
     #rendering file vars.yaml
     def rendering(self,in_file,out_file=""):
+        try:
+            with open(in_file) as f:
+                vars = yaml.load(f, Loader=SafeLoader)
+                print(vars["vars"].items())
+                #print(list(vars["vars"].items())[0])
 
-        with open(in_file) as f:
-            vars = yaml.load(f, Loader=SafeLoader)
-            print(vars["vars"].items())
-            #print(list(vars["vars"].items())[0])
 
+            rep2 = r".*/"
+            rpl = ""
+            fl = re.sub(rep2, rpl, in_file)
+            print("")
+            print("\033[37;1;41m !!! \033[0m",fl,"\033[37;1;41m !!! \033[0m")
+            print("\033[37;1;41m ==================================================================================================================================== \033[0m")
+            file = open(in_file)
+            txt = file.read()
+            file.close()
+            y = 0
+            while y < len(vars["vars"]):
+                param = list(vars["vars"].items())[y][1]
+                rep = r"{={(\s*"+list(vars["vars"].items())[y][0]+"\s*)}=}"
+                txt = re.sub(rep, param, txt)
+                y = y + 1
+            with open(out_file, "w") as f:
+                f.write(txt)
+            print(txt)
+            print("\033[37;1;41m ==================================================================================================================================== \033[0m")
+        except Exception as e:
+            self.yaml_debug("rendering - error",1)
+            self.yaml_debug(e.message)
+            self.yaml_debug(e.args)
 
-        rep2 = r".*/"
-        rpl = ""
-        fl = re.sub(rep2, rpl, in_file)
-        print("")
-        print("\033[37;1;41m !!! \033[0m",fl,"\033[37;1;41m !!! \033[0m")
-        print("\033[37;1;41m ==================================================================================================================================== \033[0m")
-        file = open(in_file)
-        txt = file.read()
-        file.close()
-        y = 0
-        while y < len(vars["vars"]):
-            param = list(vars["vars"].items())[y][1]
-            rep = r"{={(\s*"+list(vars["vars"].items())[y][0]+"\s*)}=}"
-            txt = re.sub(rep, param, txt)
-            y = y + 1
-        with open(out_file, "w") as f:
-            f.write(txt)
-        print(txt)
-        print("\033[37;1;41m ==================================================================================================================================== \033[0m")
 
     #printing from yaml file
     def yaml_print(self,txt,color=0):
@@ -89,6 +97,8 @@ class IAC_MNG:
             print("\033[37;1;32m"+str(txt)+"\033[0m") #GREEN
         elif color == 3:
             print("\033[33;1;34m"+str(txt)+"\033[0m") #GREEN
+        elif color == 4:
+            print("\033[30;1;43m"+str(txt)+"\033[0m") #yellow      
         else:
             print(str(txt))
         #Памятка, Таблица цветов и фонов
@@ -201,9 +211,10 @@ class IAC_MNG:
 
     #ci/cd syntax check
     def yaml_syntax_check(self,in_file):
+        self.error = 0
         srt = self.yaml_sort()
         self.yaml_debug("--------------------------------")
-        self.yaml_debug("      yaml_syntax_check"         )
+        self.yaml_debug("         Syntax check"         )
         self.yaml_debug("--------------------------------")
 
         with open(in_file) as f:
@@ -214,8 +225,11 @@ class IAC_MNG:
             #print(type(vars[pts][pts2]))
             if type(vars[pts][pts2]) == typ:                        
                 self.yaml_debug("  |==> "+pts2+" - syntax check - ok",2)
+                return
             else:
                 self.yaml_debug("  |==> "+pts2+" - syntax check - error",1)
+                self.error = self.error + 1
+
 
         #checking elements one by one
         def param_test(param):
@@ -246,15 +260,60 @@ class IAC_MNG:
                 i = i + 1
 
         all_param_test(srt)
+        return self.error
+
+
+    def yaml_ci_cd_start(self,in_file):
+        if self.error > 0:
+            return
+        srt = self.yaml_sort()
+        self.yaml_debug("--------------------------------")
+        self.yaml_debug("           Start"         )
+        self.yaml_debug("--------------------------------")
+
+        with open(in_file) as f:
+            vars = yaml.load(f, Loader=SafeLoader)
+        
+
+
+        def param_test(param):
+            self.yaml_debug(param+":")
+            i = 0
+            while i < len(vars[param].keys()):
+                if list(vars[param].keys())[i] == "print":
+                    self.yaml_print("==>: "+vars[param]["print"],4)
+                elif list(vars[param].keys())[i] == "prog":
+                    print("start")
+                elif list(vars[param].keys())[i] == "code":
+                    print("stop")
+                elif list(vars[param].keys())[i] == "file":
+                    self.rendering_file(in_file)
+                elif list(vars[param].keys())[i] == "mode":
+                    print("start")
+                else:
+                    self.yaml_debug(vars[param]+" syntax check - error",1)
+                i = i + 1
+        
+        def all_param_test(prm):
+            i = 0
+            while i < len(prm):
+                if prm[i] == "vars":
+                    i = i + 1
+                    continue
+                param_test(prm[i])
+                i = i + 1
+
+        all_param_test(srt)
 
 
 
 a = IAC_MNG()
 a.conf()
-a.test()
+#a.test()
 #a.parser()
 #a.yaml_print("text",3)
 a.rendering(a.path+a.ci_cd_file,a.path+"tmp_"+a.ci_cd_file)
 #a.rendering_file(a.path+a.ci_cd_file_tmp)
 #print(a.yaml_sort())
-a.yaml_syntax_check(a.path+a.ci_cd_file_tmp)
+print(a.yaml_syntax_check(a.path+a.ci_cd_file_tmp))
+a.yaml_ci_cd_start(a.path+a.ci_cd_file_tmp)
