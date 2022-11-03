@@ -1,3 +1,5 @@
+#Level CI
+from doctest import script_from_examples
 import re
 import yaml
 import os
@@ -19,8 +21,10 @@ class IAC_MNG:
     conf_file = "conf.yaml"
     ci_cd_file_tmp = "tmp_"+ci_cd_file
 
+    #error
     error = 0
-
+    #Тип языка запуска скриптов
+    script_type = ""
 
     #template file
     def rendering_file(self,in_file):
@@ -36,8 +40,8 @@ class IAC_MNG:
                 i = i + 1
         except Exception as e:
             self.yaml_debug("rendering_file - error",1)
-            self.yaml_debug(e.message)
-            self.yaml_debug(e.args)
+            # self.yaml_debug(e.message)
+            # self.yaml_debug(e.args)
 
     #Add config
     def conf(self):
@@ -122,15 +126,21 @@ class IAC_MNG:
             print(str(txt)) 
 
     #code processing method
-    def prog(self,txt,cpm):
+    def code(self,txt,cpm):
+        random_number = randint(1, 1000)
+        file = "prog"+random_number
         if cpm == "py":
-            random_number = randint(1, 1000)
-            with open(self.path+"prog"+random_number+".py", "w") as f:
+            file = file + ".py"
+            with open(self.path+file, "w") as f:
                 f.write(txt)
+            os.system("/usr/bin/python3 "+file)
+            return
         elif cpm == "bash":
-            random_number = randint(1, 1000)
-            with open(self.path+"prog"+random_number+".sh", "w") as f:
+            file = file + ".sh"
+            with open(self.path+file, "w") as f:
                 f.write(txt)
+            os.system("/usr/bin/bash "+file)
+            return
 
 
     def test(self):
@@ -283,13 +293,14 @@ class IAC_MNG:
                 if list(vars[param].keys())[i] == "print":
                     self.yaml_print("==>: "+vars[param]["print"],4)
                 elif list(vars[param].keys())[i] == "prog":
-                    print("start")
+                    self.script_type = vars[param]["prog"]
+                    print(self.script_type)
                 elif list(vars[param].keys())[i] == "code":
-                    print("stop")
+                    print(vars[param]["code"])
                 elif list(vars[param].keys())[i] == "file":
                     self.rendering_file(in_file)
                 elif list(vars[param].keys())[i] == "mode":
-                    print("start")
+                    self.yaml_print(str(vars[param]["mode"]),2)
                 else:
                     self.yaml_debug(vars[param]+" syntax check - error",1)
                 i = i + 1
