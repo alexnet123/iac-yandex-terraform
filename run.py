@@ -1,7 +1,6 @@
 import re
 import yaml
 import os
-#import difflib
 from yaml.loader import SafeLoader
 from random import randint
 
@@ -85,13 +84,13 @@ class IAC_MNG:
     #printing from yaml file
     def yaml_print(self,txt,color=0):
         if color == 1:
-            print("\033[37;1;41m"+txt+"\033[0m") #RED
+            print("\033[37;1;41m"+str(txt)+"\033[0m") #RED
         elif color == 2:
-            print("\033[37;1;32m"+txt+"\033[0m") #GREEN
+            print("\033[37;1;32m"+str(txt)+"\033[0m") #GREEN
         elif color == 3:
-            print("\033[33;1;34m"+txt+"\033[0m") #GREEN
+            print("\033[33;1;34m"+str(txt)+"\033[0m") #GREEN
         else:
-            print(txt)
+            print(str(txt))
         #Памятка, Таблица цветов и фонов
         #Цвет      код         код фона
         #black    30  40    \033[30m  \033[40m
@@ -106,9 +105,11 @@ class IAC_MNG:
     #debug
     def yaml_debug(self,txt,color=0):
         if color == 1:
-            print("\033[37;1;41m"+txt+"\033[0m") #RED
+            print("\033[37;1;41m"+str(txt)+"\033[0m") #RED
+        if color == 2:
+            print("\033[37;1;32m"+str(txt)+"\033[0m") #GREEN
         elif color == 0:
-            print(txt) 
+            print(str(txt)) 
 
     #code processing method
     def prog(self,txt,cpm):
@@ -149,6 +150,10 @@ class IAC_MNG:
         print("===============================================================================================")
         print('print(vars["render"]["file"])')
         print(vars["render"]["file"])
+        print("===============================================================================================")
+        print("===============================================================================================")
+        print('print(vars["level3"]["prog"]')
+        print(vars["level3"]["prog"])
         print("===============================================================================================")
 
     #ci/cd execution sort
@@ -196,13 +201,52 @@ class IAC_MNG:
 
     #ci/cd syntax check
     def yaml_syntax_check(self,in_file):
-        print(self.yaml_sort())
+        srt = self.yaml_sort()
+        self.yaml_debug("--------------------------------")
+        self.yaml_debug("      yaml_syntax_check"         )
+        self.yaml_debug("--------------------------------")
+
         with open(in_file) as f:
             vars = yaml.load(f, Loader=SafeLoader)
         
-        print(vars[self.yaml_sort()[0]]["mode1"])
+        #data type check
+        def param_type_test(pts,pts2,typ):
+            #print(type(vars[pts][pts2]))
+            if type(vars[pts][pts2]) == typ:                        
+                self.yaml_debug("  |==> "+pts2+" - syntax check - ok",2)
+            else:
+                self.yaml_debug("  |==> "+pts2+" - syntax check - error",1)
 
-        #print(list(vars["vars"].items())[0]) 
+        #checking elements one by one
+        def param_test(param):
+            self.yaml_debug(param+":")
+            i = 0
+            while i < len(vars[param].keys()):
+                if list(vars[param].keys())[i] == "print":
+                    param_type_test(param,"print",str)
+                elif list(vars[param].keys())[i] == "prog":
+                    param_type_test(param,"prog",str)
+                elif list(vars[param].keys())[i] == "code":
+                    param_type_test(param,"code",str)
+                elif list(vars[param].keys())[i] == "file":
+                    param_type_test(param,"file",list)
+                elif list(vars[param].keys())[i] == "mode":
+                    param_type_test(param,"mode",bool)
+                else:
+                    self.yaml_debug(vars[param]+" syntax check - error",1)
+                i = i + 1
+        
+        def all_param_test(prm):
+            i = 0
+            while i < len(prm):
+                if prm[i] == "vars":
+                    i = i + 1
+                    continue
+                param_test(prm[i])
+                i = i + 1
+
+        all_param_test(srt)
+
 
 
 a = IAC_MNG()
@@ -210,7 +254,7 @@ a.conf()
 a.test()
 #a.parser()
 #a.yaml_print("text",3)
-#a.rendering(a.path+a.ci_cd_file,a.path+"tmp_"+a.ci_cd_file)
+a.rendering(a.path+a.ci_cd_file,a.path+"tmp_"+a.ci_cd_file)
 #a.rendering_file(a.path+a.ci_cd_file_tmp)
 #print(a.yaml_sort())
 a.yaml_syntax_check(a.path+a.ci_cd_file_tmp)
