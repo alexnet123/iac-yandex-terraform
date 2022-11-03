@@ -20,11 +20,22 @@ class IAC_MNG:
     ci_cd_file = "vars.yaml"
     conf_file = "conf.yaml"
     ci_cd_file_tmp = "tmp_"+ci_cd_file
+    py_path = ""
+    bash_path = ""
 
     #error
     error = 0
     #Тип языка запуска скриптов
     script_type = ""
+    #файлы на удаление
+    tmp_arr = []
+
+    #Cleaning up temporary files
+    def tmp_cliner(self):
+        # while i < len(self.tmp_arr):
+            # os.system("rm "+self.tmp_arr[i])
+            os.system("rm "+self.path+"prog*")
+            # i = i + 1
 
     #template file
     def rendering_file(self,in_file):
@@ -49,6 +60,8 @@ class IAC_MNG:
             with open(self.conf_file) as f:
                 conf = yaml.load(f, Loader=SafeLoader)
             print("\033[37;1;41m ==================================================================================================================================== \033[0m")
+            self.py_path = conf['python3']
+            self.bash_path = conf['bash']
             i = 0 
             while i < len(conf['pr_folder']):
                 print(i+1," | ",conf['pr_folder'][i])
@@ -102,7 +115,7 @@ class IAC_MNG:
         elif color == 3:
             print("\033[33;1;34m"+str(txt)+"\033[0m") #GREEN
         elif color == 4:
-            print("\033[30;1;43m"+str(txt)+"\033[0m") #yellow      
+            print("\033[43;1;30m"+str(txt)+"\033[0m") #yellow      
         else:
             print(str(txt))
         #Памятка, Таблица цветов и фонов
@@ -128,18 +141,18 @@ class IAC_MNG:
     #code processing method
     def code(self,txt,cpm):
         random_number = randint(1, 1000)
-        file = "prog"+random_number
+        file = "prog"+str(random_number)
         if cpm == "py":
             file = file + ".py"
             with open(self.path+file, "w") as f:
                 f.write(txt)
-            os.system("/usr/bin/python3 "+file)
+            os.system(self.py_path+self.path+file)
             return
         elif cpm == "bash":
             file = file + ".sh"
             with open(self.path+file, "w") as f:
                 f.write(txt)
-            os.system("/usr/bin/bash "+file)
+            os.system(self.bash_path+self.path+file)
             return
 
 
@@ -272,13 +285,13 @@ class IAC_MNG:
         all_param_test(srt)
         return self.error
 
-
+    #Level CI\CD Start 
     def yaml_ci_cd_start(self,in_file):
         if self.error > 0:
             return
         srt = self.yaml_sort()
         self.yaml_debug("--------------------------------")
-        self.yaml_debug("           Start"         )
+        self.yaml_debug("         Start CI/CD"         )
         self.yaml_debug("--------------------------------")
 
         with open(in_file) as f:
@@ -296,7 +309,8 @@ class IAC_MNG:
                     self.script_type = vars[param]["prog"]
                     print(self.script_type)
                 elif list(vars[param].keys())[i] == "code":
-                    print(vars[param]["code"])
+                    #print(vars[param]["code"])
+                    self.code(vars[param]["code"],self.script_type)
                 elif list(vars[param].keys())[i] == "file":
                     self.rendering_file(in_file)
                 elif list(vars[param].keys())[i] == "mode":
@@ -328,3 +342,4 @@ a.rendering(a.path+a.ci_cd_file,a.path+"tmp_"+a.ci_cd_file)
 #print(a.yaml_sort())
 print(a.yaml_syntax_check(a.path+a.ci_cd_file_tmp))
 a.yaml_ci_cd_start(a.path+a.ci_cd_file_tmp)
+a.tmp_cliner()
