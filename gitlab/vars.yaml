@@ -76,7 +76,7 @@ level1.2:
   print: Add file meta.yaml
   prog: bash
   code: |
-    cat << EOF >> meta.yaml
+    cat < EOF > meta.yaml
     #cloud-config
     ssh_pwauth: no
     users:
