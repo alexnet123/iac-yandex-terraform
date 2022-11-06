@@ -55,7 +55,7 @@ level1.1:
   print: Checkout branch
   git:
     checkout: tmp_dev
-
+    status: 
 
 level1.2:
   print: Add file meta.yaml
@@ -81,7 +81,7 @@ level4:
 
 #Terraform OS creation
 #------------------------------------------------------------------------------------------------------------------#
-level2: 
+level2:
   print: Terraform OS creation
 
 level2.1: 
