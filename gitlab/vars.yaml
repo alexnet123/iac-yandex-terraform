@@ -79,6 +79,7 @@ level1.2:
 level4:
   print: "***Git commit***"
   git:
+    add: "*"
     commit: gitlab
 
 
