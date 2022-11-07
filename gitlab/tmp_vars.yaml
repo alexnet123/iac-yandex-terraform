@@ -62,10 +62,10 @@ level1.1:
     #remote:
 
 level1.2:
-  print: Add file meta.yaml
+  print: Add file templates/terraform/meta.yaml
   prog: bash
   code: |
-    cat < EOF > meta.yaml
+    cat < EOF > templates/terraform/meta.yaml
     #cloud-config
     ssh_pwauth: no
     users:
@@ -92,14 +92,14 @@ level2.1:
   print: Terraform OS install
   prog: bash
   code: | 
-    cd templates/terraform/main.tf && terraform init
-    cd templates/ansible/main.yaml && terraform apply -no-color -input=false -auto-approve=true
+    cd templates/terraform/ && terraform init
+    cd templates/terraform/ && terraform apply -no-color -input=false -auto-approve=true
 
 # level2.2: 
 #   print: Terraform OS destroy
 #   prog: bash
 #   code: | 
-#     terraform destroy -no-color -input=false -auto-approve=true
+#     cd templates/terraform/ && terraform destroy -no-color -input=false -auto-approve=true
 #     rm папка темп
 #------------------------------------------------------------------------------------------------------------------#
   
@@ -110,6 +110,6 @@ level3:
   print: Install gitlab 
   prog: bash
   code: |
-    cd templates/ansible/gitlab.yaml && ansible-playbook
+    cd templates/ansible/ && ansible-playbook gitlab.yaml
 #------------------------------------------------------------------------------------------------------------------# 
 ...
