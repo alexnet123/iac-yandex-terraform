@@ -86,7 +86,7 @@ level4:
 #Terraform OS creation
 #------------------------------------------------------------------------------------------------------------------#
 level2:
-  print: Terraform OS creation
+  print: TERRAFORM
 
 level2.1: 
   print: Terraform init and apply
@@ -111,6 +111,7 @@ level3:
   print: Install gitlab 
   prog: bash
   code: |
-    cd templates/ansible/ && ansible-playbook gitlab.yaml
+    cd templates/ansible/
+    ansible-playbook gitlab.yaml
 #------------------------------------------------------------------------------------------------------------------# 
 ...
