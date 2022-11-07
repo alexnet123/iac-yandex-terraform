@@ -42,7 +42,7 @@ vars:
 #=====================
 
 level5.4:
-  print: Checkout branch
+  print: "***Git checkout dev***"
   git:
     checkout: dev
 
@@ -55,10 +55,10 @@ level1:
 
 
 level1.1:
-  print: Checkout branch
+  print: "***Git checkout tmp_dev***"
   git:
     checkout: tmp_dev
-    status:
+    #status:
     #remote:
 
 level1.2:
