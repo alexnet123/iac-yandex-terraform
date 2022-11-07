@@ -65,7 +65,7 @@ level1.2:
   print: Add file templates/terraform/meta.yaml
   prog: bash
   code: |
-    cat < EOF > templates/terraform/meta.yaml
+    cat << EOF > templates/terraform/meta.yaml
     #cloud-config
     ssh_pwauth: no
     users:
