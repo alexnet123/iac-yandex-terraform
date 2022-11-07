@@ -79,7 +79,7 @@ level1.2:
 level4:
   print: "***Git commit***"
   git:
-    commit: 
+    commit: gitlab
 
 
 #Terraform OS creation

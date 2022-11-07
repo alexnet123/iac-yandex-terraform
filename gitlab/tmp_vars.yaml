@@ -76,11 +76,10 @@ level1.2:
           - /root/.ssh/id_rsa.pub
     EOF
 #------------------------------------------------------------------------------------------------------------------#
-
-
 level4:
-  print: test1
-
+  print: "***Git commit***"
+  git:
+    commit: gitlab
 
 
 #Terraform OS creation
