@@ -49,13 +49,17 @@ level5.4:
 #File preparation
 #------------------------------------------------------------------------------------------------------------------#
 level1:
-  print: File preparation
+  print: PWD
+  pwd:
+  #cd: gitlab/
+
 
 level1.1:
   print: Checkout branch
   git:
     checkout: tmp_dev
-    status: 
+    status:
+    #remote:
 
 level1.2:
   print: Add file meta.yaml
@@ -91,12 +95,12 @@ level2.1:
     cd templates/terraform/main.tf && terraform init
     cd templates/ansible/main.yaml && terraform apply -no-color -input=false -auto-approve=true
 
-level2.2: 
-  print: Terraform OS destroy
-  prog: bash
-  code: | 
-    terraform destroy -no-color -input=false -auto-approve=true
-    rm папка темп
+# level2.2: 
+#   print: Terraform OS destroy
+#   prog: bash
+#   code: | 
+#     terraform destroy -no-color -input=false -auto-approve=true
+#     rm папка темп
 #------------------------------------------------------------------------------------------------------------------#
   
 
