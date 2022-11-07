@@ -27,9 +27,13 @@
       shell: "curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash"
   
     - name: "Add the GitLab package repository and install the package - 2"
-      shell: "apt install gitlab-ce"
-      register: git_log
-  
+      apt:
+        pkg:
+          - gitlab-ce
+        state: latest
+        update_cache: true
+      register: git_log    
+
     # - name: "Change GitLab configurations"
     - lineinfile:
         dest: /etc/gitlab/gitlab.rb

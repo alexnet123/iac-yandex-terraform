@@ -76,11 +76,10 @@ level1.2:
           - {={ ssh_key_path }=}
     EOF
 #------------------------------------------------------------------------------------------------------------------#
-
-
 level4:
-  print: test1
-
+  print: "***Git commit***"
+  git:
+    commit: 
 
 
 #Terraform OS creation
