@@ -66,6 +66,7 @@ level1.2:
 #Rendering file
 #------------------------------------------------------------------------------------------------------------------#
 level1.3:
+  print: Rendering file
   render:  
     file:
       - "templates/terraform/main.tf"
