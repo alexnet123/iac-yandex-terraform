@@ -104,8 +104,8 @@ level2.1:
 #Anseble install gitlab
 #------------------------------------------------------------------------------------------------------------------#
 level3:
-  pwd: templates/ansible/
-  cd: 
+  pwd:
+  cd:  templates/ansible/
   print: Install gitlab 
   prog: bash
   code: |
