@@ -104,6 +104,7 @@ level2.1:
 #Anseble install gitlab
 #------------------------------------------------------------------------------------------------------------------#
 level3:
+  pwd:
   print: Install gitlab 
   prog: bash
   code: |
