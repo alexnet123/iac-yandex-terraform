@@ -42,7 +42,7 @@ level1:
 level1.1:
   print: "***Git checkout tmp_dev***"
   git:
-    checkout: tmp_dev
+    checkout: temp_dev
     #status:
     #remote:
 
