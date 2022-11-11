@@ -65,5 +65,5 @@ resource "yandex_compute_instance" "{={ hostname }=}" {
      hostname_vm1 = "{={ hostname }=}"
     }
   )
-  filename = "hosts"
+  filename = "templates/ansible/hosts"
 }
