@@ -58,7 +58,7 @@ level1.2:
         sudo: ALL=(ALL) NOPASSWD:ALL
         shell: /bin/bash
         ssh_authorized_keys:
-          - echo `cat {={ ssh_key_path }=}`
+          - `cat {={ ssh_key_path }=}`
     EOF
 #------------------------------------------------------------------------------------------------------------------#
 
