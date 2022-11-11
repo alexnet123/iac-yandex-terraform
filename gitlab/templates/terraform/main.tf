@@ -65,5 +65,5 @@ resource "yandex_compute_instance" "{={ hostname }=}" {
      hostname_vm1 = "{={ hostname }=}"
     }
   )
-  filename = "templates/ansible/hosts"
+  filename = "/home/alex/docs/iac/iac-yandex-terraform/gitlab/templates/ansible/hosts"
 }
