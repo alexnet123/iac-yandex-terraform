@@ -42,11 +42,11 @@
       become: yes
       become_user: postgres
 
-    - name: "Grant db {{ db_user }} access to app db"
+    - name: "Grant db {{ db_user }} access to {{ db_name }} db"
       postgresql_privs:
         type: database
         database: "{{ db_name }}"
-        roles: ibrarian,reader
+        roles: librarian,reader
         grant_option: true
         privs: all
       become: yes

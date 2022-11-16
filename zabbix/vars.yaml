@@ -27,11 +27,6 @@ vars:
 
 
 
-level5.4:
-  print: "***Git checkout dev***"
-  git:
-    checkout: dev
-
 #File preparation
 #------------------------------------------------------------------------------------------------------------------#
 level1:
@@ -72,12 +67,6 @@ level1.3:
       - "templates/terraform/main.tf"
       - "templates/ansible/zabbix.yaml"
 #------------------------------------------------------------------------------------------------------------------#
-
-level4:
-  print: "***Git commit***"
-  git:
-    add: "*"
-    commit: zabbix
 
 
 #Terraform OS creation
@@ -124,4 +113,15 @@ level3.2:
     ansible-playbook zabbix.yaml
   pwd:
 #------------------------------------------------------------------------------------------------------------------# 
+
+level4:
+  print: "***Git commit***"
+  git:
+    add: "*"
+    commit: zabbix
+
+level5.4:
+  print: "***Git checkout dev***"
+  git:
+    checkout: dev
 ...
