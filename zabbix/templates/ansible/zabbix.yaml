@@ -49,13 +49,6 @@
         regexp: '^# DBPassword='
         line: "DBPassword={{ db_password }}"
 
-  handlers:
-    - name: restart zabbix
-      service: name=zabbix state=restarted        
-
-    - name: restart zabbix
-      service: name=apache2 state=restarted
-
     - debug:
         msg:
         - "zabbix URL http://{{ ansible_host }}/zabbix"
@@ -63,4 +56,13 @@
         - "db_user: {{ db_user }}"
         - "db_password: {{ db_password }}"
         - "db_name: {{ db_name }}"
+
+  handlers:
+    - name: restart zabbix
+      service: name=zabbix state=restarted        
+
+    - name: restart zabbix
+      service: name=apache2 state=restarted
+
+
 

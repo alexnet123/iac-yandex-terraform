@@ -105,16 +105,19 @@ level2.1:
 #Anseble install zabbix
 #------------------------------------------------------------------------------------------------------------------#
 level3:
-  print: Install zabbix
+  print: Install zabbix and pgsql
+  pause: 30
 
-level3.1:  
+level3.1:
+  print: Install pgsql  
   prog: bash
   code: |
     cd templates/ansible/
     ansible-playbook pgsql.yaml
   pwd:
 
-level3.2:  
+level3.2:
+  print: Install zabbix 
   prog: bash
   code: |
     cd templates/ansible/
