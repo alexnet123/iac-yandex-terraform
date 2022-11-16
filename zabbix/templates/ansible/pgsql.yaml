@@ -46,8 +46,8 @@
       postgresql_privs:
         type: database
         database: "{{ db_name }}"
-        roles: "{{ db_user }}"
-        grant_option: no
+        roles: ibrarian,reader
+        grant_option: true
         privs: all
       become: yes
       become_user: postgres
