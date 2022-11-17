@@ -51,7 +51,7 @@
     - name: Add postgresql db zabbix
       become: true
       become_user: postgres
-      shell: psql --command "CREATE DATABASE {{ db_name }} OWNER {{ db_user }};"
+      shell: *psql --command "CREATE DATABASE {{ db_name }} OWNER {{ db_user }};"
 
     - name: Extract /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz ==> /usr/share/zabbix-sql-scripts/postgresql/server.sql
       shell: gunzip -c /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz > /usr/share/zabbix-sql-scripts/postgresql/server.sql
