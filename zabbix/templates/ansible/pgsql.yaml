@@ -31,7 +31,6 @@
       postgresql_db:
         state: present
         name: "{{ db_name }}"
-        owner: "{{ db_user }}"
       become: yes
       become_user: postgres
 
