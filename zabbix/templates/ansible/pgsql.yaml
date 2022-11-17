@@ -27,27 +27,27 @@
         path: "/var/lib/pgsql/data/pg_hba.conf"
       register: postgres_data
 
-    - name: "Create {{ db_name }} database"
-      postgresql_db:
-        state: present
-        name: "{{ db_name }}"
-      become: yes
-      become_user: postgres
+    # - name: "Create {{ db_name }} database"
+    #   postgresql_db:
+    #     state: present
+    #     name: "{{ db_name }}"
+    #   become: yes
+    #   become_user: postgres
 
-    - name: "Create user db {{ db_name }}"
-      postgresql_user:
-        state: present
-        name: "{{ db_user }}"
-        password: "{{ db_password }}"
-      become: yes
-      become_user: postgres
+    # - name: "Create user db {{ db_name }}"
+    #   postgresql_user:
+    #     state: present
+    #     name: "{{ db_user }}"
+    #     password: "{{ db_password }}"
+    #   become: yes
+    #   become_user: postgres
 
-    - name: "Grant db {{ db_user }} access to {{ db_name }} db"
-      postgresql_privs:
-        type: database
-        database: "{{ db_name }}"
-        roles: "{{ db_user }}"
-        grant_option: true
-        privs: all
-      become: yes
-      become_user: postgres
+    # - name: "Grant db {{ db_user }} access to {{ db_name }} db"
+    #   postgresql_privs:
+    #     type: database
+    #     database: "{{ db_name }}"
+    #     roles: "{{ db_user }}"
+    #     grant_option: true
+    #     privs: all
+    #   become: yes
+    #   become_user: postgres

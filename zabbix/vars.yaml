@@ -38,8 +38,8 @@ level1:
 level1.1:
   print: "***Git checkout tmp_dev***"
   git:
-    branch: "-D temp_dev"
-    branch: "temp_dev"
+    #branch: "-D temp_dev"
+    #branch: "temp_dev"
     checkout: temp_dev
     #status:
     #remote:
