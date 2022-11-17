@@ -118,7 +118,7 @@ level4:
   print: "***Git commit***"
   git:
     add: "*"
-    commit: zabbix
+    commit: "-m 'zabbix'"
 
 level5.4:
   print: "***Git checkout dev***"
