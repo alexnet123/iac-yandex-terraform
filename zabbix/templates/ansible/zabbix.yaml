@@ -33,6 +33,16 @@
         state: latest
         update_cache: true
 
+    - name: enable apache2
+      service: 
+        name: apache2 
+        enabled: yes
+
+    - name: enable zabbix
+      service: 
+        name: zabbix-server
+        enabled: yes
+
     - name: Extract /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz ==> /usr/share/zabbix-sql-scripts/postgresql/server.sql
       shell: gunzip -c /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz > /usr/share/zabbix-sql-scripts/postgresql/server.sql
 
