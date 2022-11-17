@@ -65,6 +65,9 @@
         regexp: '^# DBPassword='
         line: "DBPassword={{ db_password }}"
 
+    - name: Unconditionally reboot the machine with all defaults
+      reboot:
+
     - debug:
         msg:
         - "zabbix URL http://{{ ansible_host }}/zabbix"
