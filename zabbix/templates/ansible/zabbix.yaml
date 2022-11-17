@@ -74,7 +74,7 @@
 
     - debug:
         msg:
-        - "zabbix URL http://{{ ansible_host }}/zabbix"
+        - "zabbix (login:Admin pass:zabbix) URL http://{{ ansible_host }}/zabbix"
         - "ssh {={ user }=}@{{ ansible_host }}"
         - "db_user: {{ db_user }}"
         - "db_password: {{ db_password }}"
