@@ -53,14 +53,17 @@
       become_user: postgres
       shell: psql --command "CREATE DATABASE {{ db_name }} OWNER {{ db_user }};"
 
-    - name: Extract /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz ==> /usr/share/zabbix-sql-scripts/postgresql/server.sql
-      shell: gunzip -c /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz > /usr/share/zabbix-sql-scripts/postgresql/server.sql
-
-
     - name: Add some dummy data to our database
-      become: true
-      become_user: postgres
-      shell: psql {{ db_name }} < /usr/share/zabbix-sql-scripts/postgresql/server.sql
+      shell: "zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u {{ db_user }} psql {{ db_user }}"
+
+    # - name: Extract /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz ==> /usr/share/zabbix-sql-scripts/postgresql/server.sql
+    #   shell: gunzip -c /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz > /usr/share/zabbix-sql-scripts/postgresql/server.sql
+
+
+    # - name: Add some dummy data to our database
+    #   become: true
+    #   become_user: postgres
+    #   shell: psql {{ db_name }} < /usr/share/zabbix-sql-scripts/postgresql/server.sql
       
 
     #- name: "Change zabbix configurations"
