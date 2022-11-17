@@ -38,11 +38,11 @@ level1:
 level1.1:
   print: "***Git checkout tmp_dev***"
   git:
+    #add: "*"
+    #commit: "-m 'zabbix'"
     #branch: "-D temp_dev"
     #branch: "temp_dev"
     checkout: temp_dev
-    #status:
-    #remote:
 
 level1.2:
   print: Add file templates/terraform/meta.yaml

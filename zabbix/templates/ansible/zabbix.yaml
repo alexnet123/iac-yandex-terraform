@@ -46,12 +46,12 @@
     - name: Add postgresql user zabbix
       become: true
       become_user: postgres
-      shell: psql --command "CREATE USER {{ db_user }} WITH PASSWORD '\'{{ db_password }}\'';"
+      shell: su - postgres -c 'psql --command "CREATE USER {{ db_user }} WITH PASSWORD '\'{{ db_password }}\'';"'
 
     - name: Add postgresql db zabbix
       become: true
       become_user: postgres
-      shell: *psql --command "CREATE DATABASE {{ db_name }} OWNER {{ db_user }};"
+      shell: su - postgres -c 'psql --command "CREATE DATABASE {{ db_name }} OWNER {{ db_user }};"'
 
     - name: Extract /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz ==> /usr/share/zabbix-sql-scripts/postgresql/server.sql
       shell: gunzip -c /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz > /usr/share/zabbix-sql-scripts/postgresql/server.sql
