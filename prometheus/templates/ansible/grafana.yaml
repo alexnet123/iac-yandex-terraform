@@ -19,5 +19,5 @@
 
     - debug:
         msg:
-        - "node-exporter URL http://{{ ansible_host }}:3000"
+        - "node-exporter (login:admin \ pass:admin) URL http://{{ ansible_host }}:3000"
         - "ssh {={ user }=}@{{ ansible_host }}"
