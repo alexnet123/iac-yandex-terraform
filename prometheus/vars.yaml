@@ -64,7 +64,7 @@ level1.3:
     file:
       - "templates/terraform/main.tf"
       - "templates/ansible/prometheus.yaml"
-      - "templates/ansible/node_exporter.yaml"
+      - "templates/ansible/node-exporter.yaml"
       - "templates/ansible/grafana.yaml"
 #------------------------------------------------------------------------------------------------------------------#
 
@@ -105,11 +105,11 @@ level3.1:
     ansible-playbook prometheus.yaml
 
 level3.2:
-  print: Install node_exporter 
+  print: Install node-exporter 
   prog: bash
   code: |
     cd templates/ansible/
-    ansible-playbook node_exporter.yaml
+    ansible-playbook node-exporter.yaml
 
 level3.3:
   print: Install grafana 
