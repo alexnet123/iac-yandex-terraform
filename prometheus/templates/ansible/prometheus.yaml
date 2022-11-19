@@ -90,3 +90,8 @@
         name: prometheus
         state: started
         enabled: yes
+
+    - debug:
+        msg:
+        - "prometheus URL http://{{ ansible_host }}:9090"
+        - "ssh {={ user }=}@{{ ansible_host }}"
