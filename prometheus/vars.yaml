@@ -1,0 +1,117 @@
+---
+#Level CI
+#Debug
+#------------------------------------------------------------------------------------------------------------------#
+debug:
+  mode: true
+#------------------------------------------------------------------------------------------------------------------#
+
+#Variables ==> {={ xxx }=}
+#------------------------------------------------------------------------------------------------------------------#
+vars:
+  token: "y0_AgAAAABkbnEbAATuwQAAAADRe319HyCOnGH2Q2SiGV_TEQrlLBgz1RI"      
+  cloud_id: "b1gbalrr4suqf4hapk6f"
+  folder_id: "b1gq0mj5rh4up9offieh"
+  zone: "ru-central1-a"
+  subnet_id: "e9b8fq1qlnj7mb6r5rgf"
+  hostname: "prometheus"
+  user: "admin"
+  ansible_python_interpreter: "/usr/bin/python3"
+  ssh_key_path: "/root/.ssh/id_rsa.pub"
+  image_id: "fd8m8s42796gm6v7sf8e" #Debian 11
+  vm_memory: "2"
+  vm_Vcpu: "2"
+  vm_disk_size: "15"
+  hosts_path: "/home/alex/docs/iac/iac-yandex-terraform/prometheus/templates/ansible/hosts"
+#------------------------------------------------------------------------------------------------------------------#
+
+
+
+#File preparation
+#------------------------------------------------------------------------------------------------------------------#
+level1:
+  print: PWD
+  pwd:
+
+
+
+level1.1:
+  print: "***Git checkout tmp_dev***"
+  git:
+    checkout: prometheus
+
+level1.2:
+  print: Add file templates/terraform/meta.yaml
+  prog: bash
+  code: |
+    cat << EOF > templates/terraform/meta.yaml
+    #cloud-config
+    ssh_pwauth: no
+    users:
+      - name: {={ user }=}
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        shell: /bin/bash
+        ssh_authorized_keys:
+          - `cat {={ ssh_key_path }=}`
+    EOF
+#------------------------------------------------------------------------------------------------------------------#
+
+#Rendering file
+#------------------------------------------------------------------------------------------------------------------#
+level1.3:
+  print: Rendering file
+  render:  
+    file:
+      - "templates/terraform/main.tf"
+      - "templates/ansible/prometheus.yaml"
+#------------------------------------------------------------------------------------------------------------------#
+
+
+#Terraform OS creation
+#------------------------------------------------------------------------------------------------------------------#
+level2:
+  print: TERRAFORM
+
+level2.1: 
+  print: Terraform init and apply
+  prog: bash
+  code: | 
+    cd templates/terraform/
+    terraform init
+    terraform apply -no-color -input=false -auto-approve=true
+
+# level2.2: 
+#   print: Terraform OS destroy
+#   prog: bash
+#   code: | 
+#     cd templates/terraform/ && terraform destroy -no-color -input=false -auto-approve=true
+#     rm папка темп
+#------------------------------------------------------------------------------------------------------------------#
+  
+
+#Anseble install prometheus
+#------------------------------------------------------------------------------------------------------------------#
+level3:
+  print: Install prometheus pause
+  pause: 30
+
+level3.1:
+  print: Install prometheus 
+  prog: bash
+  code: |
+    cd templates/ansible/
+    ansible-playbook prometheus.yaml
+  pwd:
+#------------------------------------------------------------------------------------------------------------------# 
+
+level4:
+  print: "***Git commit***"
+  git:
+    add: "*"
+    commit: "-m 'prometheus'"
+
+level5.4:
+  print: "***Git checkout dev***"
+  git:
+    checkout: dev
+...

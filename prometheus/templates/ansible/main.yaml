@@ -1,0 +1,139 @@
+# ---
+# - name: "MAIN"
+#   hosts: localhost
+#   vars:
+#     ansible_connection: local
+#     ansible_python_interpreter: "{={ ansible_python_interpreter }=}"
+#     ssh_key_path: "{={ ssh_key_path }=}"
+#   vars_prompt:
+
+#     - name: commands 
+#       prompt: |
+        
+#         ===============================================================
+#         Terraform main commands:
+#         (1) apply   - ( Create or update infrastructure )
+#         (2) destroy - ( Destroy previously-created infrastructure )
+#         (3) exit
+#         ===============================================================
+#       private: false
+
+#   tasks:
+    
+    ####################################################################################################
+    #Exit
+    ####################################################################################################
+    # - name: "Exit playbook"
+    #   meta: end_play
+    #   when: commands == "3" 
+    ####################################################################################################
+    
+    # - name: "CAT id_rsa.pub => vars"
+    #   shell: "cat {{ ssh_key_path }}"
+    #   register: ssh_key    
+    # - name: "Copy meta content"
+    #   copy:
+    #     content: |
+    #       #cloud-config
+    #       ssh_pwauth: no
+    #       users:
+    #         - name: {={ user }=}
+    #           sudo: ALL=(ALL) NOPASSWD:ALL
+    #           shell: /bin/bash
+    #           ssh_authorized_keys:
+    #             - {{ ssh_key.stdout }}
+    #     dest: "{{ playbook_dir }}/meta.yaml"
+
+    # - debug: 
+    #     msg: 
+    #     - "{{ playbook_dir }}"
+    #     - "{{ ansible_python_interpreter }}"
+    
+    ####################################################################################################
+    #Terraform commands
+    ####################################################################################################
+
+    # - name: "Terraform destroy"
+    #   command: terraform destroy -no-color -input=false -auto-approve=true
+    #   args:
+    #     chdir: "{{ playbook_dir }}"
+    #   delegate_to: localhost
+    #   become: true     
+    #   register: destroy
+    #   when: commands == "2"
+
+    # - debug: 
+    #     msg: "{{ destroy }}"
+    #   when: commands == "2"
+
+    # - name: "Terraform rm file"
+    #   file:
+    #     path: "{{ playbook_dir }}"
+    #     state: absent
+    #   delegate_to: localhost
+    #   become: true     
+    #   register: rm_file
+    #   when: commands == "2"
+
+    # - name: "Terraform init"
+    #   command: terraform init
+    #   args:
+    #     chdir: "{{ playbook_dir }}"
+    #   delegate_to: localhost
+    #   become: true     
+    #   when: commands == "1"
+
+    # - name: "Terraform aplly"
+    #   command: terraform apply -no-color -input=false -auto-approve=true
+    #   args:
+    #     chdir: "{{ playbook_dir }}"
+    #   delegate_to: localhost
+    #   become: true     
+    #   register: aplly
+    #   when: commands == "1"
+
+    # - debug: 
+    #     msg: "{{ aplly }}"
+    #   when: commands == "1"
+    ####################################################################################################
+
+    ####################################################################################################
+    # Refresh_inventory
+    ####################################################################################################
+    # - name: "Refresh inventory and pause 30 sec"
+    #   meta: refresh_inventory
+    # - pause:
+    #     seconds: 30
+    #   when: commands == "1"
+    ####################################################################################################
+
+
+####################################################################################################
+# HOSTNAME
+####################################################################################################
+# - name: "Hostname ==> {={ hostname }=}"
+#   hosts: servers
+#   become: true
+#   tasks:   
+#     - name: "Set a hostname - {={ hostname }=}"
+#       shell: hostnamectl set-hostname {={ hostname }=}
+#       when: "{{ansible_hostname}}" != {={ hostname }=}
+    
+#     - name: reboot
+#       shell: reboot
+#       when: "{{ansible_hostname}}" != {={ hostname }=}
+####################################################################################################
+
+####################################################################################################
+# Include gitlab
+####################################################################################################
+# - name: "gitlab"
+#   hosts: servers
+#   become: true
+#   tasks:   
+#     - name: "Include gitlab"
+#       import_tasks: gitlab.yaml
+
+####################################################################################################
+
+# ...      

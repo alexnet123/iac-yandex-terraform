@@ -1,0 +1,8 @@
+#cloud-config
+ssh_pwauth: no
+users:
+  - name: admin
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - echo ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD2NBfTxuMxuU68pBWaJc90AlnRSA5/89w6ZsMo/FNKscKiYDI4GHQLOai5+5Sb1A3q6n1O94hSOFKmESyUmrmIgfmqR27enfU+C0REZIgPS+r1dc9asqSyKPf/Nr6X3T7EQha3Bkzy99hJ6jEBpj7vMrENE6F8Uyik4pXJLrc0n4ckw/QE+iqJ4QSpgj5hw9f+Ii1P8IrGfNLuig+GuSkVTWQkew5buw4FfgVE1Mrr3TzNf3VRSmky68gTd8TyN7ovSObQpzDPScHdv++63aS5GNG29tlxT2YpysrU2KspG9qxQkguN44k8KrM3DLlKtlya1KmtwpGeGfMqH1CfUKP root@PC-DB
