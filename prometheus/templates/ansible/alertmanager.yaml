@@ -1,0 +1,80 @@
+  ####################################################################################################
+  # Install alertmanager+debian11 for prometheus
+  ####################################################################################################
+
+- name: "Play alertmanager"
+  hosts: servers
+  vars:
+    serviceName: "alertmanager"
+    userId: "prometheus"
+    groupId: "prometheus"
+    exec_command: "/usr/local/bin/alertmanager --config.file=/etc/prometheus/alertmanager.yml --storage.path=/var/lib/prometheus/alertmanager"
+    version: "0.24.0"
+  become: true
+  tasks:
+
+    - name: Install alertmanager
+      unarchive:
+        src: "https://github.com/prometheus/alertmanager/releases/download/v{{ version }}/alertmanager-{{ version }}.linux-amd64.tar.gz"
+        dest: /tmp/
+        remote_src: yes
+
+    - name: Copy alertmanager file to bin
+      copy:
+        src: "/tmp/alertmanager-{{ version }}.linux-amd64/alertmanager"
+        dest: "/usr/local/bin/alertmanager"
+        owner: "{{userId}}"
+        group: "{{groupId}}"
+        remote_src: yes
+        mode: 0755
+
+    - name: Copy alertmanager file to bin
+      copy:
+        src: "/tmp/alertmanager-{{ version }}.linux-amd64/amtool"
+        dest: "/usr/local/bin/amtool"
+        owner: "{{userId}}"
+        group: "{{groupId}}"
+        remote_src: yes
+        mode: 0755
+
+    - name: Copy alertmanager config
+      copy:
+        src: /tmp/alertmanager-{{ version }}.linux-amd64/alertmanager.yml 
+        dest: /etc/prometheus/alertmanager.yml
+        remote_src: yes
+    
+    - name: chmod 777 /etc/prometheus/alertmanager.yml
+      file:
+        path: "/etc/prometheus/alertmanager.yml"
+        owner: "{{userId}}"
+        group: "{{groupId}}"
+        mode: 0777
+
+    - name: Copy systemd init file
+      template:
+        src: file/init.service.j2
+        dest: /etc/systemd/system/prometheus-alertmanager.service
+
+    - name: chmod 777 /var/lib/prometheus/alertmanager
+      file:
+        path: "/var/lib/prometheus/alertmanager"
+        owner: "{{userId}}"
+        group: "{{groupId}}"
+        mode: 0777
+        state: directory
+
+    - name: Delete alertmanager tmp folder
+      file:
+        path: '/tmp/alertmanager-{{ version }}.linux-amd64'
+        state: absent
+
+    - name: Start alertmanager service
+      service:
+        name: prometheus-alertmanager
+        state: started
+        enabled: yes
+
+    - debug:
+        msg:
+        - "alertmanager URL http://{{ ansible_host }}:9093"
+        - "ssh admin@{{ ansible_host }}"
