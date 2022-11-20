@@ -76,7 +76,7 @@ level4:
   print: "***Git commit***"
   git:
     add: "*"
-    commit: gitlab
+    commit: "-m 'gitlab'"
 
 
 #Terraform OS creation
@@ -104,6 +104,9 @@ level2.1:
 #Anseble install gitlab
 #------------------------------------------------------------------------------------------------------------------#
 level3:
+  pause: 30
+
+level3.1:
   #cd:  templates/ansible/
   print: Install gitlab 
   prog: bash
