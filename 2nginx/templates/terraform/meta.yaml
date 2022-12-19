@@ -6,3 +6,17 @@ users:
     shell: /bin/bash
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD2NBfTxuMxuU68pBWaJc90AlnRSA5/89w6ZsMo/FNKscKiYDI4GHQLOai5+5Sb1A3q6n1O94hSOFKmESyUmrmIgfmqR27enfU+C0REZIgPS+r1dc9asqSyKPf/Nr6X3T7EQha3Bkzy99hJ6jEBpj7vMrENE6F8Uyik4pXJLrc0n4ckw/QE+iqJ4QSpgj5hw9f+Ii1P8IrGfNLuig+GuSkVTWQkew5buw4FfgVE1Mrr3TzNf3VRSmky68gTd8TyN7ovSObQpzDPScHdv++63aS5GNG29tlxT2YpysrU2KspG9qxQkguN44k8KrM3DLlKtlya1KmtwpGeGfMqH1CfUKP root@PC-DB
+timezone: Europe/Moscow
+repo_update: true
+repo_upgrade: true
+apt:
+  preserve_sources_list: true
+
+packages:
+  - nginx
+
+runcmd:
+  - [ systemctl, nginx-reload ]
+  - [ systemctl, enable, nginx.service ]
+  - [ systemctl, start, --no-block, nginx.service ]
+  - [ sh, -c, "echo $(hostname | cut -d '.' -f 1 ) > /var/www/html/index.html" ]
