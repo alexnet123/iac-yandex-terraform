@@ -1,0 +1,3 @@
+[servers]
+test ansible_host=158.160.32.164  ansible_user=admin ansible_python_interpreter=/usr/bin/python3
+
