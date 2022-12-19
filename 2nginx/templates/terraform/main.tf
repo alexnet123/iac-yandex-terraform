@@ -21,7 +21,7 @@ provider "yandex" {
 
 resource "yandex_compute_instance" "nginx" {
   count = 2
-   name = "{={ hostname }=}"
+   name = "{={ hostname }=}$(count.index)"
   platform_id = "standard-v3" #Intel Ice Lake
 
   resources {
