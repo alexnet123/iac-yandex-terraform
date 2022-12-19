@@ -14,7 +14,7 @@ vars:
   folder_id: "b1gq0mj5rh4up9offieh"
   zone: "ru-central1-a"
   subnet_id: "e9b8fq1qlnj7mb6r5rgf"
-  hostname: "prometheus"
+  hostname: "2nginx"
   user: "admin"
   ansible_python_interpreter: "/usr/bin/python3"
   ssh_key_path: "/root/.ssh/id_rsa.pub"
@@ -22,7 +22,7 @@ vars:
   vm_memory: "2"
   vm_Vcpu: "2"
   vm_disk_size: "15"
-  hosts_path: "/home/alex/docs/iac/iac-yandex-terraform/prometheus/templates/ansible/hosts"
+  hosts_path: "/home/alex/docs/iac/iac-yandex-terraform/2nginx/templates/ansible/hosts"
 #------------------------------------------------------------------------------------------------------------------#
 
 
@@ -38,7 +38,7 @@ level1:
 level1.1:
   print: "***Git checkout tmp_dev***"
   git:
-    checkout: prometheus
+    checkout: 2nginx_new
 
 level1.2:
   print: Add file templates/terraform/meta.yaml
@@ -63,9 +63,8 @@ level1.3:
   render:  
     file:
       - "templates/terraform/main.tf"
-      - "templates/ansible/prometheus.yaml"
-      - "templates/ansible/node-exporter.yaml"
-      - "templates/ansible/grafana.yaml"
+      - "templates/ansible/2nginx.yaml"
+
 #------------------------------------------------------------------------------------------------------------------#
 
 
@@ -94,7 +93,7 @@ level2.1:
 #Anseble install prometheus
 #------------------------------------------------------------------------------------------------------------------#
 level3:
-  print: Install node_exporter,grafana,prometheus pause
+  print: Install nginx pause
   pause: 30
 
 level3.1:
@@ -102,28 +101,15 @@ level3.1:
   prog: bash
   code: |
     cd templates/ansible/
-    ansible-playbook prometheus.yaml
+    ansible-playbook 2ngix.yaml
 
-level3.2:
-  print: Install node-exporter 
-  prog: bash
-  code: |
-    cd templates/ansible/
-    ansible-playbook node-exporter.yaml
-
-level3.3:
-  print: Install grafana 
-  prog: bash
-  code: |
-    cd templates/ansible/
-    ansible-playbook grafana.yaml
 #------------------------------------------------------------------------------------------------------------------# 
 
 level4:
   print: "***Git commit***"
   git:
     add: "*"
-    commit: "-m 'prometheus'"
+    commit: "-m '2nginx'"
 
 level5.4:
   print: "***Git checkout dev***"
