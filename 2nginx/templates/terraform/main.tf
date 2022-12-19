@@ -127,10 +127,10 @@ resource "yandex_lb_network_load_balancer" "balancer" {
     {
      external_ip_address_vm0 = yandex_compute_instance.nginx[0].network_interface.0.nat_ip_address
      user_vm0 = "{={ user }=}"
-     hostname_vm0 = "{={ hostname }=}"[0]
+     hostname_vm0 = "{={ hostname }=}[0]"
      external_ip_address_vm1 = yandex_compute_instance.nginx[1].network_interface.0.nat_ip_address
      user_vm1 = "{={ user }=}"
-     hostname_vm1 = "{={ hostname }=}"[1]
+     hostname_vm1 = "{={ hostname }=}[1]"
     }
   )
   filename = "{={ hosts_path }=}"
