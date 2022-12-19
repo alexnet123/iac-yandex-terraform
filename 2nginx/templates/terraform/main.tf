@@ -39,7 +39,7 @@ resource "yandex_compute_instance" "vm" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.sub_net1.id
-    #nat       = true
+    nat       = true
   }
    
   metadata = {
