@@ -14,7 +14,7 @@ vars:
   folder_id: "b1gq0mj5rh4up9offieh"
   zone: "ru-central1-a"
   subnet_id: "e9b8fq1qlnj7mb6r5rgf"
-  hostname: "2nginx"
+  hostname: "vm"
   user: "admin"
   ansible_python_interpreter: "/usr/bin/python3"
   ssh_key_path: "/root/.ssh/id_rsa.pub"
