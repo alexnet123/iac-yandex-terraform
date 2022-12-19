@@ -19,7 +19,7 @@ provider "yandex" {
 
 #vm1#####################################################
 
-resource "yandex_compute_instance" "nginx" {
+resource "yandex_compute_instance" "vm" {
   count = 2
    name = "{={ hostname }=}$(count.index)"
   platform_id = "standard-v3" #Intel Ice Lake
@@ -73,12 +73,12 @@ resource "yandex_lb_target_group" "balancergr1" {
 
   target {
     subnet_id    = yandex_vpc_subnet.sub_net1.id
-    address   = yandex_compute_instance.nginx[0].network_interface.0.ip_address
+    address   = yandex_compute_instance.vm[0].network_interface.0.ip_address
   }
 
   target {
     subnet_id    = yandex_vpc_subnet.sub_net1.id
-    address   = yandex_compute_instance.nginx[1].network_interface.0.ip_address
+    address   = yandex_compute_instance.vm[1].network_interface.0.ip_address
   }
 
 }
@@ -125,10 +125,10 @@ resource "yandex_lb_network_load_balancer" "balancer" {
  resource "local_file" "hosts" {
   content = templatefile("hosts.tmpl",
     {
-     external_ip_address_vm0 = yandex_compute_instance.nginx[0].network_interface.0.nat_ip_address
+     external_ip_address_vm0 = yandex_compute_instance.vm[0].network_interface.0.nat_ip_address
      user_vm0 = "{={ user }=}"
      hostname_vm0 = "{={ hostname }=}0"
-     external_ip_address_vm1 = yandex_compute_instance.nginx[1].network_interface.0.nat_ip_address
+     external_ip_address_vm1 = yandex_compute_instance.vm[1].network_interface.0.nat_ip_address
      user_vm1 = "{={ user }=}"
      hostname_vm1 = "{={ hostname }=}1"
     }
